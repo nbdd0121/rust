@@ -175,8 +175,10 @@ macro_rules! from_str_radix_nzint_impl {
     )*}
 }
 
-from_str_radix_nzint_impl! { NonZeroU8 NonZeroU16 NonZeroU32 NonZeroU64 NonZeroU128 NonZeroUsize
-NonZeroI8 NonZeroI16 NonZeroI32 NonZeroI64 NonZeroI128 NonZeroIsize }
+from_str_radix_nzint_impl! { NonZeroU8 NonZeroU16 NonZeroU32 NonZeroU64 NonZeroUsize
+NonZeroI8 NonZeroI16 NonZeroI32 NonZeroI64 NonZeroIsize }
+#[cfg(not(no_i128))]
+from_str_radix_nzint_impl! { NonZeroU128 NonZeroI128 }
 
 macro_rules! nonzero_leading_trailing_zeros {
     ( $( $Ty: ident($Uint: ty) , $LeadingTestExpr:expr ;)+ ) => {

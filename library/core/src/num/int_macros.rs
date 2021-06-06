@@ -2,7 +2,8 @@ macro_rules! int_impl {
     ($SelfT:ty, $ActualT:ident, $UnsignedT:ty, $BITS:expr, $Min:expr, $Max:expr,
      $rot:expr, $rot_op:expr, $rot_result:expr, $swap_op:expr, $swapped:expr,
      $reversed:expr, $le_bytes:expr, $be_bytes:expr,
-     $to_xe_bytes_doc:expr, $from_xe_bytes_doc:expr) => {
+     $to_xe_bytes_doc:expr, $from_xe_bytes_doc:expr
+     $(, from_str_attr {$($from_str_attr: tt)*})? ) => {
         /// The smallest value that can be represented by this integer type.
         ///
         /// # Examples
@@ -58,6 +59,7 @@ macro_rules! int_impl {
         /// ```
         #[doc = concat!("assert_eq!(", stringify!($SelfT), "::from_str_radix(\"A\", 16), Ok(10));")]
         /// ```
+        $($($from_str_attr)*)?
         #[stable(feature = "rust1", since = "1.0.0")]
         pub fn from_str_radix(src: &str, radix: u32) -> Result<Self, ParseIntError> {
             from_str_radix(src, radix)
