@@ -299,6 +299,7 @@ language_item_table! {
     EhCatchTypeinfo,         sym::eh_catch_typeinfo,   eh_catch_typeinfo,          Target::Static;
 
     OwnedBox,                sym::owned_box,           owned_box,                  Target::Struct;
+    BoxNew,                  sym::box_new,             box_new,                    Target::Method(MethodKind::Inherent);
 
     PhantomData,             sym::phantom_data,        phantom_data,               Target::Struct;
 

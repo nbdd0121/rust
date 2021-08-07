@@ -9,6 +9,7 @@
 #![feature(iter_zip)]
 #![feature(once_cell)]
 #![feature(min_specialization)]
+#![feature(label_break_value)]
 #![recursion_limit = "256"]
 
 #[macro_use]

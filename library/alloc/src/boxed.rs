@@ -187,6 +187,7 @@ impl<T> Box<T> {
     #[cfg(not(no_global_oom_handling))]
     #[inline(always)]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(not(bootstrap), lang = "box_new")]
     pub fn new(x: T) -> Self {
         box x
     }

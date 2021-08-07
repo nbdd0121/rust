@@ -341,6 +341,7 @@ symbols! {
         borrowck_graphviz_postflow,
         borrowck_graphviz_preflow,
         box_free,
+        box_new,
         box_patterns,
         box_syntax,
         bpf_target_feature,
