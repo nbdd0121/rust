@@ -231,16 +231,23 @@ impl<'a, 'tcx> Builder<'a, 'tcx> {
                             let box_ = Rvalue::NullaryOp(NullOp::Box, value.ty);
                             this.cfg.push_assign(block, source_info, Place::from(result), box_);
 
-                            // initialize the box contents:
-                            unpack!(
-                                block = this.expr_into_dest(
-                                    this.tcx.mk_place_deref(Place::from(result)),
-                                    block,
-                                    value
-                                )
+                            // initialize the box contents as if it's call operand.
+                            // This cannot be assigned directly into `*result` because
+                            // borrow checker don't like it.
+                            let operand = unpack!(block = this.as_local_call_operand(block, value));
+                            this.cfg.push_assign(
+                                block,
+                                source_info,
+                                this.tcx.mk_place_deref(Place::from(result)),
+                                Rvalue::Use(operand),
                             );
-                            let rvalue = Rvalue::Use(Operand::Move(Place::from(result)));
-                            this.cfg.push_assign(block, source_info, destination, rvalue);
+
+                            this.cfg.push_assign(
+                                block,
+                                source_info,
+                                destination,
+                                Rvalue::Use(Operand::Move(Place::from(result))),
+                            );
                             break 'block block.unit();
                         }
                     }
