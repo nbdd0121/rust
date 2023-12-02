@@ -351,6 +351,7 @@ impl<'v> hir_visit::Visitor<'v> for StatCollector<'v> {
                 Path,
                 OpaqueDef,
                 TraitObject,
+                FieldInfo,
                 Typeof,
                 Infer,
                 Err
@@ -611,6 +612,7 @@ impl<'v> ast_visit::Visitor<'v> for StatCollector<'v> {
                 Path,
                 TraitObject,
                 ImplTrait,
+                FieldInfo,
                 Paren,
                 Typeof,
                 Infer,

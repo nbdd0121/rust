@@ -1072,7 +1072,8 @@ impl<'tcx> Ty<'tcx> {
             | ty::RawPtr(_)
             | ty::FnDef(..)
             | ty::Error(_)
-            | ty::FnPtr(_) => true,
+            | ty::FnPtr(_)
+            | ty::FieldInfo(..) => true,
             ty::Tuple(fields) => fields.iter().all(Self::is_trivially_freeze),
             ty::Slice(elem_ty) | ty::Array(elem_ty, _) => elem_ty.is_trivially_freeze(),
             ty::Adt(..)
@@ -1111,7 +1112,8 @@ impl<'tcx> Ty<'tcx> {
             | ty::RawPtr(_)
             | ty::FnDef(..)
             | ty::Error(_)
-            | ty::FnPtr(_) => true,
+            | ty::FnPtr(_)
+            | ty::FieldInfo(..) => true,
             ty::Tuple(fields) => fields.iter().all(Self::is_trivially_unpin),
             ty::Slice(elem_ty) | ty::Array(elem_ty, _) => elem_ty.is_trivially_unpin(),
             ty::Adt(..)
@@ -1240,7 +1242,11 @@ impl<'tcx> Ty<'tcx> {
             // Conservatively return `false` for all others...
 
             // Anonymous function types
-            ty::FnDef(..) | ty::Closure(..) | ty::Dynamic(..) | ty::Coroutine(..) => false,
+            ty::FnDef(..)
+            | ty::Closure(..)
+            | ty::Dynamic(..)
+            | ty::Coroutine(..)
+            | ty::FieldInfo(..) => false,
 
             // Generic or inferred types
             //
@@ -1352,6 +1358,8 @@ pub fn needs_drop_components<'tcx>(
         // Foreign types can never have destructors.
         ty::Foreign(..) => Ok(SmallVec::new()),
 
+        ty::FieldInfo(..) => Ok(SmallVec::new()),
+
         ty::Dynamic(..) | ty::Error(_) => Err(AlwaysRequiresDrop),
 
         ty::Slice(ty) => needs_drop_components(tcx, ty),
@@ -1404,7 +1412,8 @@ pub fn is_trivially_const_drop(ty: Ty<'_>) -> bool {
         | ty::FnDef(..)
         | ty::FnPtr(_)
         | ty::Never
-        | ty::Foreign(_) => true,
+        | ty::Foreign(_)
+        | ty::FieldInfo(..) => true,
 
         ty::Alias(..)
         | ty::Dynamic(..)

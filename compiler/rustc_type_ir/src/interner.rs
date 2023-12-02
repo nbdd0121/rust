@@ -10,6 +10,7 @@ use crate::{
 pub trait Interner: Sized {
     type DefId: Copy + Debug + Hash + Ord;
     type AdtDef: Copy + Debug + Hash + Ord;
+    type FieldInfoDef: Copy + Debug + Hash + Ord;
 
     type GenericArgs: Copy
         + DebugWithInfcx<Self>

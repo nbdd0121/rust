@@ -13,9 +13,9 @@ use stable_mir::mir::mono::{Instance, MonoItem, StaticDef};
 use stable_mir::mir::{Mutability, Safety};
 use stable_mir::ty::{
     Abi, AdtDef, Binder, BoundRegionKind, BoundTyKind, BoundVariableKind, ClosureKind, Const,
-    DynKind, ExistentialPredicate, ExistentialProjection, ExistentialTraitRef, FloatTy, FnSig,
-    GenericArgKind, GenericArgs, IndexedVal, IntTy, Movability, Region, RigidTy, Span, TermKind,
-    TraitRef, Ty, UintTy, VariantDef, VariantIdx,
+    DynKind, ExistentialPredicate, ExistentialProjection, ExistentialTraitRef, FieldInfoDef,
+    FloatTy, FnSig, GenericArgKind, GenericArgs, IndexedVal, IntTy, Movability, Region, RigidTy,
+    Span, TermKind, TraitRef, Ty, UintTy, VariantDef, VariantIdx,
 };
 use stable_mir::{CrateItem, DefId};
 
@@ -117,6 +117,9 @@ impl<'tcx> RustcInternal<'tcx> for RigidTy {
             ),
             RigidTy::Tuple(tys) => {
                 rustc_ty::TyKind::Tuple(tables.tcx.mk_type_list(&tys.internal(tables)))
+            }
+            RigidTy::FieldInfo(..) => {
+                todo!()
             }
         }
     }
@@ -448,6 +451,13 @@ impl<'tcx> RustcInternal<'tcx> for Safety {
             Safety::Unsafe => rustc_hir::Unsafety::Unsafe,
             Safety::Normal => rustc_hir::Unsafety::Normal,
         }
+    }
+}
+
+impl<'tcx> RustcInternal<'tcx> for FieldInfoDef {
+    type T = rustc_ty::FieldInfoDef<'tcx>;
+    fn internal(&self, tables: &mut Tables<'tcx>) -> Self::T {
+        tables.tcx.field_info_def(self.0.internal(&mut *tables))
     }
 }
 

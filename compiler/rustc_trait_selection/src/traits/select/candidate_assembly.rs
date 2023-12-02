@@ -490,7 +490,8 @@ impl<'cx, 'tcx> SelectionContext<'cx, 'tcx> {
                 | ty::CoroutineWitness(..)
                 | ty::Never
                 | ty::Tuple(_)
-                | ty::Error(_) => return true,
+                | ty::Error(_)
+                | ty::FieldInfo(..) => return true,
                 // FIXME: Function definitions could actually implement `FnPtr` by
                 // casting the ZST function def to a function pointer.
                 ty::FnDef(_, _) => return true,
@@ -624,7 +625,8 @@ impl<'cx, 'tcx> SelectionContext<'cx, 'tcx> {
                 | ty::Coroutine(..)
                 | ty::Never
                 | ty::Tuple(_)
-                | ty::CoroutineWitness(..) => {
+                | ty::CoroutineWitness(..)
+                | ty::FieldInfo(..) => {
                     // Only consider auto impls if there are no manual impls for the root of `self_ty`.
                     //
                     // For example, we only consider auto candidates for `&i32: Auto` if no explicit impl
@@ -956,7 +958,7 @@ impl<'cx, 'tcx> SelectionContext<'cx, 'tcx> {
                 candidates.vec.push(ConstDestructCandidate(None));
             }
 
-            ty::Adt(..) => {
+            ty::Adt(..) | ty::FieldInfo(..) => {
                 let mut relevant_impl = None;
                 self.tcx().for_each_relevant_impl(
                     self.tcx().require_lang_item(LangItem::Drop, None),
@@ -1031,7 +1033,8 @@ impl<'cx, 'tcx> SelectionContext<'cx, 'tcx> {
             | ty::Bound(_, _)
             | ty::Error(_)
             | ty::Infer(_)
-            | ty::Placeholder(_) => {}
+            | ty::Placeholder(_)
+            | ty::FieldInfo(..) => {}
         }
     }
 
@@ -1098,7 +1101,8 @@ impl<'cx, 'tcx> SelectionContext<'cx, 'tcx> {
                 | ty::InferTy::FloatVar(_)
                 | ty::InferTy::FreshIntTy(_)
                 | ty::InferTy::FreshFloatTy(_),
-            ) => {}
+            )
+            | ty::FieldInfo(..) => {}
             ty::Infer(ty::InferTy::TyVar(_) | ty::InferTy::FreshTy(_)) => {
                 candidates.ambiguous = true;
             }

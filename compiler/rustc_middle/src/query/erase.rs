@@ -334,6 +334,7 @@ tcx_lifetime! {
     rustc_middle::traits::query::type_op::ProvePredicate,
     rustc_middle::traits::query::type_op::Subtype,
     rustc_middle::ty::AdtDef,
+    rustc_middle::ty::FieldInfoDef,
     rustc_middle::ty::AliasTy,
     rustc_middle::ty::ClauseKind,
     rustc_middle::ty::ClosureTypeInfo,

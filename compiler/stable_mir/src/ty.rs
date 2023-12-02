@@ -466,6 +466,7 @@ pub enum RigidTy {
     Never,
     Tuple(Vec<Ty>),
     CoroutineWitness(CoroutineWitnessDef, GenericArgs),
+    FieldInfo(FieldInfoDef, GenericArgs),
 }
 
 impl RigidTy {
@@ -735,6 +736,10 @@ crate_def! {
 
 crate_def! {
     pub CoroutineWitnessDef;
+}
+
+crate_def! {
+    pub FieldInfoDef;
 }
 
 /// A list of generic arguments.

@@ -282,7 +282,8 @@ where
             | ty::Param(..)
             | ty::Bound(..)
             | ty::Error(_)
-            | ty::CoroutineWitness(..) => {}
+            | ty::CoroutineWitness(..)
+            | ty::FieldInfo(..) => {}
             ty::Placeholder(..) | ty::Infer(..) => {
                 bug!("unexpected type: {:?}", ty)
             }
@@ -630,7 +631,8 @@ impl<'tcx> EmbargoVisitor<'tcx> {
             | DefKind::Field
             | DefKind::GlobalAsm
             | DefKind::Impl { .. }
-            | DefKind::Closure => (),
+            | DefKind::Closure
+            | DefKind::FieldInfo => (),
         }
     }
 }
